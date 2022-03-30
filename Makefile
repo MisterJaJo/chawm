@@ -4,8 +4,8 @@
 
 include config.mk
 
-SRC      = $(wildcard ${SRC_DIR}/*.c)
-OBJ      = $(patsubst src/%.c, build/%.o, $(SRC))
+SRC      = $(wildcard ${SRC_DIR}/*.c ${SRC_DIR}/*/*.c)
+OBJ      = ${SRC:.c=.o}
 DEPS     = $(addprefix -I, $(SRC_DIR))
 
 vpath %.c $(SRC_DIR)

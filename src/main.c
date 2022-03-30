@@ -4,6 +4,9 @@
 #include "instance.h"
 #include "event_manager.h"
 
+#include "keybinds/handlers.h"
+#include "expose/handlers.h"
+
 int main(void)
 {
 	// Create the chawm instance
@@ -11,6 +14,10 @@ int main(void)
 	
 	// Create an event manager
 	struct chawm_event_manager *ev_manager = chawm_event_manager_new();
+	
+	// Create the event handlers
+	chawm_keybinds_setup_event_handlers(ev_manager);
+	chawm_expose_setup_event_handlers(ev_manager);
 
 	// Enter event loop
 	xcb_generic_event_t *event;
