@@ -9,6 +9,8 @@
 #define CALLOC(cnt, type) ((type *) calloc(cnt, sizeof(type)))
 #define FREE(value)       free(value)
 
+#define LENGTH(ptr)       (sizeof(ptr) / sizeof(ptr[0]))
+
 #define die(fmt)          fprintf(stderr, fmt); exit(1)
 
 #endif
