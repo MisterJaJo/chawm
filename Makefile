@@ -35,7 +35,7 @@ ${BUILD_DIR}:
 	mkdir -p $@
 
 clean:
-	rm -rf ${BUILD_DIR}
+	rm -rf ${BUILD_DIR} ${OBJ}
 
 $(foreach bdir, $(BUILD_DIR), $(eval $(call make-goal, $(bdir))))
 

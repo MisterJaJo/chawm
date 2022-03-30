@@ -24,12 +24,12 @@ FREETYPE_INC   = /usr/include/freetype2
 
 # includes and libs
 INCS = -I${XCB_INC} -I${FREETYPE_INC}
-LIBS = -lxcb ${XINERAMA_LIBS} ${FREETYPE_LIBS}
+LIBS = -lxcb -lxcb-ewmh ${XINERAMA_LIBS} ${FREETYPE_LIBS}
 
 # flags
 CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DVERSION=\"${VERSION}\" ${XINERAMA_FLAGS}
-CFLAGS   = -std=c99 -pedantic -Wall -Wno-deprecated-declarations -Os ${INCS} ${DEFINITIONS} ${CPPFLAGS}
+CFLAGS   = -ggdb -std=c99 -pedantic -Wall -Wno-deprecated-declarations -Os ${INCS} ${DEFINITIONS} ${CPPFLAGS}
 LDFLAGS  = ${LIBS}
 
 # compiler and linker
-CC = cc
+CC = gcc
