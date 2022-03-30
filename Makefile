@@ -16,7 +16,6 @@ $1/%.o: %.c
 endef
 
 all: options checkdirs build/chawm
-.PHONY: all checkdirs clean
 
 options:
 	@echo chawm build options:
@@ -39,3 +38,15 @@ clean:
 	rm -rf ${BUILD_DIR}
 
 $(foreach bdir, $(BUILD_DIR), $(eval $(call make-goal, $(bdir))))
+
+install: all
+	mkdir -p ${DESTDIR}${PREFIX}/bin
+	cp -f build/chawm ${DESTDIR}${PREFIX}/bin
+	chmod 755 ${DESTDIR}${PREFIX}/bin/chawm
+	cp chawm.desktop /usr/share/xsessions/
+
+uninstall:
+	rm -f ${DESTDIR}${PREFIX}/bin/dwm\
+	      /usr/share/xsessions/chawm.desktop
+
+.PHONY: all checkdirs clean install uninstall

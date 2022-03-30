@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=XSession
+Exec=/usr/local/bin/chawm
+TryExec=/usr/local/bin/chawm
+Name=chawm
+Comment=The cha(d) window manager
