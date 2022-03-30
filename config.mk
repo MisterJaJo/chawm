@@ -12,7 +12,10 @@ BUILD_DIR  = build
 PREFIX     = /usr/local
 MAN_PREFIX = ${PREFIX}/share/man
 
-XCB_INC = /usr/include/xcb
+# xcb and X11
+XCB_INC  = /usr/include/xcb
+XCB_LIBS = -lxcb -lxcb-ewmh -lxcb-xkb -lxcb-keysyms
+X11_INC  = /usr/include/X11
 
 # Xinerama, comment if you don't want it
 XINERAMA_LIBS  = -lXinerama
@@ -23,8 +26,8 @@ FREETYPE_LIBS  = -lfontconfig -lXft
 FREETYPE_INC   = /usr/include/freetype2
 
 # includes and libs
-INCS = -I${XCB_INC} -I${FREETYPE_INC}
-LIBS = -lxcb -lxcb-ewmh ${XINERAMA_LIBS} ${FREETYPE_LIBS}
+INCS = -I${XCB_INC} -I${X11_INC} -I${FREETYPE_INC}
+LIBS = ${XCB_LIBS} ${XINERAMA_LIBS} ${FREETYPE_LIBS}
 
 # flags
 CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DVERSION=\"${VERSION}\" ${XINERAMA_FLAGS}

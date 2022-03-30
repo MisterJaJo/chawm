@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include "handlers.h"
+#include "../instance.h"
 #include "../global_flag.h"
+#include "handlers.h"
 
-void handle_expose_event(xcb_generic_event_t *event)
+void handle_expose_event(struct chawm_instance *inst, xcb_generic_event_t *event)
 {
 	chawm_global_flag_set(CHAWM_SHOULD_EXIT, 1);
 }

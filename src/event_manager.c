@@ -2,6 +2,7 @@
 #include <xcb/xcb_event.h>
 
 #include "event_manager.h"
+#include "instance.h"
 #include "util.h"
 
 struct chawm_event_manager *chawm_event_manager_new()
@@ -34,7 +35,9 @@ void chawm_event_manager_add_handler(struct chawm_event_manager *ev_manager,
 	ev_manager->handlers_count++;
 }
 
-void chawm_event_manager_handle_event(struct chawm_event_manager *ev_manager, xcb_generic_event_t *event)
+void chawm_event_manager_handle_event(struct chawm_event_manager *ev_manager, 
+				      struct chawm_instance *inst,
+				      xcb_generic_event_t *event)
 {
 	for (int i = 0; i < ev_manager->handlers_count; ++i)
 	{
@@ -46,7 +49,7 @@ void chawm_event_manager_handle_event(struct chawm_event_manager *ev_manager, xc
 		// call its handler function.
 		if (ev_handler->target_event == event_id)
 		{
-			chawm_event_handler_try_call(ev_handler, event);
+			chawm_event_handler_try_call(ev_handler, inst, event);
 		}
 	}
 }

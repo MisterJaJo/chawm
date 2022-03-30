@@ -1,6 +1,9 @@
 #include <unistd.h>
 #include <string.h>
 
+#include <xcb/xcb_keysyms.h>
+#include <X11/keysym.h>
+
 #include "atoms.h"
 #include "instance.h"
 #include "util.h"
@@ -56,7 +59,8 @@ void chawm_instance_setup_ewmh_connection(struct chawm_instance *inst)
 struct chawm_instance *chawm_instance_new(int screen_number)
 {
 	struct chawm_instance *inst = MALLOC(struct chawm_instance);
-	
+	inst->numlock_mask = 0;
+
 	// Connect to the server
 	inst->screen_number = screen_number;
 	inst->conn = xcb_connect(NULL, &inst->screen_number);
@@ -102,6 +106,117 @@ struct chawm_instance *chawm_instance_new(int screen_number)
 	chawm_instance_check_err(inst);
 
 	return inst;
+}
+
+xcb_keycode_t *chawm_instance_get_xcb_keycodes(struct chawm_instance *inst, xcb_keysym_t keysym)
+{
+	xcb_key_symbols_t *keysyms;
+	if (!(keysyms = xcb_key_symbols_alloc(inst->conn)))
+	{
+		return NULL;
+	}
+
+	xcb_keycode_t *keycode = xcb_key_symbols_get_keycode(keysyms, keysym);
+	xcb_key_symbols_free(keysyms);
+
+	return keycode;
+}
+
+xcb_keysym_t chawm_instance_get_xcb_keysym(struct chawm_instance *inst, xcb_keycode_t keycode)
+{
+	xcb_key_symbols_t *keysyms;
+	if (!(keysyms = xcb_key_symbols_alloc(inst->conn)))
+	{
+		return 0;
+	}
+
+	xcb_keysym_t keysym = xcb_key_symbols_get_keysym(keysyms, keycode, 0);
+	xcb_key_symbols_free(keysyms);
+
+	return keysym;
+}
+
+bool chawm_instance_setup_keyboard(struct chawm_instance *inst)
+{
+	xcb_get_modifier_mapping_reply_t *reply = 
+		xcb_get_modifier_mapping_reply(inst->conn,
+					       xcb_get_modifier_mapping_unchecked(inst->conn),
+					       NULL);
+	if (!reply)
+		return false;
+
+	// Get modifier mapping keycodes
+	xcb_keycode_t *modmap = xcb_get_modifier_mapping_keycodes(reply);
+	if (!modmap)
+		return false;
+
+	// Get numlock keycodes
+	xcb_keycode_t *numlock = chawm_instance_get_xcb_keycodes(inst, XK_Num_Lock);
+
+	for (int i = 4; i < 8; ++i)
+	{
+		for (int j = 0; j < reply->keycodes_per_modifier; ++j)
+		{
+			xcb_keycode_t keycode = modmap[i * reply->keycodes_per_modifier + j];
+			if (keycode == XCB_NO_SYMBOL)
+				continue;
+
+			if (numlock != NULL)
+			{
+				for (int n = 0; numlock[n] != XCB_NO_SYMBOL; ++n)
+				{
+					if (numlock[n] == keycode)
+					{
+						inst->numlock_mask = 1 << i;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	// Clean up
+	free(reply);
+	free(numlock);
+
+	return true;
+}
+
+void chawm_instance_grab_keys(struct chawm_instance *inst)
+{
+	unsigned int modifiers[] =
+	{
+		0,
+		XCB_MOD_MASK_LOCK,
+		inst->numlock_mask,
+		inst->numlock_mask | XCB_MOD_MASK_LOCK
+	};
+
+	// Ungrab all keys for current screen
+	xcb_screen_t *screen = chawm_instance_get_screen(inst);
+	xcb_ungrab_key(inst->conn, XCB_GRAB_ANY, screen->root, XCB_MOD_MASK_ANY);
+
+	// Grab keys
+	// TODO: list of keys
+	uint32_t key = XK_E;
+	uint32_t mod = XCB_MOD_MASK_4;
+
+	xcb_keycode_t *keycode = chawm_instance_get_xcb_keycodes(inst, key);
+
+	for (int k = 0; keycode[k] != XCB_NO_SYMBOL; ++k)
+	{
+		for (int m = 0; m < LENGTH(modifiers); ++m)
+		{
+			printf("Grabbed keycode %u for key symbol %u with modifier %u.\n", keycode[k], key, mod | modifiers[m]);
+			xcb_grab_key(inst->conn, 1, screen->root, 
+				     mod | modifiers[m], keycode[k],
+				     XCB_GRAB_MODE_ASYNC, // Pointer mode
+				     XCB_GRAB_MODE_ASYNC  // Keyboard mode
+			);
+		}
+	}
+
+	free(keycode);
 }
 
 void chawm_instance_check_err(struct chawm_instance *inst)

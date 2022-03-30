@@ -13,11 +13,12 @@ struct chawm_event_handler *chawm_event_handler_new(uint8_t target_event,
 }
 
 void chawm_event_handler_try_call(struct chawm_event_handler *ev_handler,
+				  struct chawm_instance *inst,
 				  xcb_generic_event_t *event)
 {
 	if (ev_handler->handler)
 	{
-		(*ev_handler->handler)(event);
+		(*ev_handler->handler)(inst, event);
 	}
 }
 

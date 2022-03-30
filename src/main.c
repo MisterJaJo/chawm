@@ -39,6 +39,10 @@ int main(void)
 	// Create the chawm instance
 	inst = chawm_instance_new(0);
 
+	// Setup input
+	chawm_instance_setup_keyboard(inst);
+	chawm_instance_grab_keys(inst);
+
 	// Create an event manager
 	ev_manager = chawm_event_manager_new();
 	
@@ -53,7 +57,7 @@ int main(void)
 	while ((event = xcb_wait_for_event(inst->conn)))
 	{
 		// Handle the event
-		chawm_event_manager_handle_event(ev_manager, event);
+		chawm_event_manager_handle_event(ev_manager, inst, event);
 
 		// Destroy the event
 		free(event);

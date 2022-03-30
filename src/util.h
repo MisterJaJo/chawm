@@ -8,6 +8,7 @@
 #define NMALLOC(type, n)  ((type*) malloc(n * sizeof(type)))
 #define CALLOC(cnt, type) ((type *) calloc(cnt, sizeof(type)))
 #define FREE(value)       free(value)
+#define CLEAN_MASK(mask)  (mask & ~(inst->numlock_mask | XCB_MOD_MASK_LOCK))
 
 #define LENGTH(ptr)       (sizeof(ptr) / sizeof(ptr[0]))
 
