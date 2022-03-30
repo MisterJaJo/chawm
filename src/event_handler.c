@@ -1,12 +1,12 @@
 #include "event_handler.h"
 #include "util.h"
 
-struct chawm_event_handler *chawm_event_handler_new(uint8_t target_response_type,
+struct chawm_event_handler *chawm_event_handler_new(uint8_t target_event,
 						    chawm_event_handler_function handler)
 {
 	struct chawm_event_handler *ev_handler = MALLOC(struct chawm_event_handler);
 	
-	ev_handler->target_response_type = target_response_type;
+	ev_handler->target_event = target_event;
 	ev_handler->handler = handler;
 
 	return ev_handler;

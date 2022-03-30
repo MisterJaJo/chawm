@@ -39,12 +39,12 @@ void chawm_event_manager_handle_event(struct chawm_event_manager *ev_manager, xc
 	for (int i = 0; i < ev_manager->handlers_count; ++i)
 	{
 		// Get the event response type
-		uint8_t response_type = XCB_EVENT_RESPONSE_TYPE(event);
+		uint8_t event_id = XCB_EVENT_SENT(event);
 		struct chawm_event_handler *ev_handler = ev_manager->handlers[i];
 
 		// If the current event is subscribed to the response type, 
 		// call its handler function.
-		if (ev_handler->target_response_type == response_type)
+		if (ev_handler->target_event == event_id)
 		{
 			chawm_event_handler_try_call(ev_handler, event);
 		}
