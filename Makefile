@@ -27,7 +27,7 @@ options:
 	@echo "CC       = ${CC}"
 
 build/chawm: ${OBJ}
-	${CC} $^ -o $@
+	${CC} $^ -o $@ ${LDFLAGS}
 
 checkdirs: ${BUILD_DIR}
 
