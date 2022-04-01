@@ -3,6 +3,8 @@
 
 #include <stdlib.h>
 
+#define LENGTH(ptr)      (sizeof(ptr) / sizeof(ptr[0]))
+
 #define MALLOC(type)     ((type*) malloc(sizeof(type)))
 #define NMALLOC(type, n) ((type*) malloc(n * sizeof(type)))
 #define FREE(ptr)        free(ptr)
