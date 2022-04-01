@@ -40,19 +40,31 @@ void chawm_instance_check_err(struct chawm_instance *inst)
 		die("Error in xcb connection");
 }
 
-xcb_keycode_t *chawm_instance_get_keycodes(struct chawm_instance *inst, xcb_keysym_t keysym)
+void chawm_instance_handle_xcb_event(struct chawm_instance *inst, xcb_generic_event_t *event)
 {
-	xcb_key_symbols_t *keysyms = xcb_key_symbols_alloc(inst->conn);
-	xcb_keycode_t *keycode;	
+	for (int i = 0; i < inst->xcb_event_handlers_count; ++i)
+	{
+		struct chawm_instance_xcb_event_handler handler = inst->xcb_event_handlers[i];
+		uint32_t handler_event_id = XCB_EVENT_SENT(event);
 
-	if (keysyms)
-		keycode = xcb_key_symbols_get_keycode(keysyms, keysym);
-	else
-		keycode = NULL;
+		if (handler_event_id == handler.event_id && handler.handler)
+		{
+			(*handler.handler)(inst, event);
+		}
+	}
+}
 
-	xcb_key_symbols_free(keysyms);
+void chawm_instance_handle_instance_event(struct chawm_instance *inst, struct chawm_instance_event event)
+{
+	for (int i = 0; i < inst->instance_event_handlers_count; ++i)
+	{
+		struct chawm_instance_event_handler handler = inst->instance_event_handlers[i];
 
-	return keycode;
+		if (handler.code == event.code && handler.handler)
+		{
+			(*handler.handler)(inst, event);
+		}
+	}
 }
 
 void chawm_instance_grab_keys(struct chawm_instance *inst)
@@ -74,12 +86,43 @@ void chawm_instance_grab_keys(struct chawm_instance *inst)
 				     *keycode,
 				     XCB_GRAB_MODE_ASYNC,
 				     XCB_GRAB_MODE_ASYNC);
-			free(keycode);
 		}
+		
+		free(keycode);
 	}
 
 	// Update connection
 	xcb_flush(inst->conn);
+}
+
+xcb_keycode_t *chawm_instance_get_keycodes(struct chawm_instance *inst, xcb_keysym_t keysym)
+{
+	xcb_key_symbols_t *keysyms = xcb_key_symbols_alloc(inst->conn);
+	xcb_keycode_t *keycode;	
+
+	if (keysyms)
+		keycode = xcb_key_symbols_get_keycode(keysyms, keysym);
+	else
+		keycode = NULL;
+
+	xcb_key_symbols_free(keysyms);
+
+	return keycode;
+}
+
+xcb_keysym_t chawm_instance_get_keysym(struct chawm_instance *inst, xcb_keycode_t keycode)
+{
+	xcb_key_symbols_t *keysyms = xcb_key_symbols_alloc(inst->conn);
+	xcb_keysym_t keysym;
+
+	if (keysyms)
+		keysym = xcb_key_symbols_get_keysym(keysyms, keycode, 0);
+	else
+		keysym = 0;
+
+	xcb_key_symbols_free(keysyms);
+
+	return keysym;
 }
 
 void chawm_instance_delete(struct chawm_instance *inst)

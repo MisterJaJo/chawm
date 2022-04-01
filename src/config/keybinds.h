@@ -3,7 +3,7 @@
 
 #include "../generic_args.h"
 #include "../keybinds.h"
-#include "../event.h"
+#include "../instance_event.h"
 #include "../util.h"
 
 #define MOD       XCB_MOD_MASK_4
@@ -18,11 +18,11 @@ static const char *dmenucmd[] = { "dmenu_run", NULL };
 static struct chawm_keybind CHAWM_KEYBINDS[] =
 {
 	// Spawn programs
-	{ MOD,             XK_t, CHAWM_EVENT_SPAWN, ARGS(.v = termcmd)  },
-	{ MOD,             XK_d, CHAWM_EVENT_SPAWN, ARGS(.v = dmenucmd) },
+	{ MOD,             XK_t, { CHAWM_EVENT_SPAWN, ARGS(.v = termcmd)  } },
+	{ MOD,             XK_d, { CHAWM_EVENT_SPAWN, ARGS(.v = dmenucmd) } },
 
 	// Quit the window manager
-	{ MOD | MOD_SHIFT, XK_e, CHAWM_EVENT_QUIT,  ARGS_NULL }
+	{ MOD | MOD_SHIFT, XK_e, { CHAWM_EVENT_QUIT,  ARGS_NULL } },
 };
 static unsigned int CHAWM_KEYBINDS_COUNT = LENGTH(CHAWM_KEYBINDS);
 
