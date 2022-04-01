@@ -16,6 +16,8 @@ struct chawm_event_manager *ev_manager;
 
 void cleanup(void)
 {
+	printf("Cleanup was called.\n");
+
 	// Destroy the event manager
 	if (ev_manager)
 		chawm_event_manager_destroy(ev_manager);
@@ -25,16 +27,10 @@ void cleanup(void)
 		chawm_instance_destroy(inst);
 }
 
-void sigint_handler(int signum)
-{
-	cleanup();
-}
-
 int main(void)
 {
 	// Register the cleanup method as atexit
 	atexit(cleanup);
-	signal(SIGINT, sigint_handler);
 
 	// Create the chawm instance
 	inst = chawm_instance_new(0);
@@ -56,11 +52,16 @@ int main(void)
 	// TODO: Consider replacing this with xcb_poll_for_event(inst->conn, 0)
 	while ((event = xcb_wait_for_event(inst->conn)))
 	{
+		printf("Got event.\n");
+
 		// Handle the event
 		chawm_event_manager_handle_event(ev_manager, inst, event);
 
 		// Destroy the event
-		free(event);
+		if (event)
+		{
+			free(event);
+		}
 
 		// Check if the CHAWM_SHOULD_EXIT_FLAG is set
 		if (chawm_global_flag_get(CHAWM_SHOULD_EXIT) == 1)
