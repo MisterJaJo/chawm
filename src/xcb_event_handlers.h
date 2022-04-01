@@ -6,11 +6,13 @@
 #include "instance.h"
 
 void chawm_handle_keypress(struct chawm_instance *inst, xcb_generic_event_t *event);
+void chawm_handle_buttonpress(struct chawm_instance *inst, xcb_generic_event_t *event);
 
 static struct chawm_instance_xcb_event_handler CHAWM_XCB_EVENT_HANDLERS[] =
 {
-	{ XCB_KEY_PRESS, chawm_handle_keypress },
-	{ XCB_NONE,      NULL },
+	{ XCB_KEY_PRESS,    chawm_handle_keypress },
+	{ XCB_BUTTON_PRESS, chawm_handle_buttonpress },
+	{ XCB_NONE,         NULL },
 };
 
 static unsigned int CHAWM_XCB_EVENT_HANDLERS_COUNT = LENGTH(CHAWM_XCB_EVENT_HANDLERS);

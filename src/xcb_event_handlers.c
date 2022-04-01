@@ -14,3 +14,20 @@ void chawm_handle_keypress(struct chawm_instance *inst, xcb_generic_event_t *eve
 		}
 	}
 }
+
+void chawm_handle_buttonpress(struct chawm_instance *inst, xcb_generic_event_t *event)
+{
+	xcb_button_press_event_t *bp_event = (xcb_button_press_event_t *) event;
+	
+	// TODO: window dragging
+
+	xcb_grab_pointer(inst->conn, 0, inst->screen->root,
+			   XCB_EVENT_MASK_BUTTON_RELEASE 
+			 | XCB_EVENT_MASK_BUTTON_MOTION 
+			 | XCB_EVENT_MASK_POINTER_MOTION_HINT,
+			 XCB_GRAB_MODE_ASYNC,
+			 XCB_GRAB_MODE_ASYNC,
+			 inst->screen->root,
+			 XCB_NONE,
+			 XCB_CURRENT_TIME);
+}
