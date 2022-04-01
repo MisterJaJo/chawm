@@ -6,6 +6,9 @@
 
 enum chawm_instance_event_code
 {
+	/// Do nothing
+	CHAWM_EVENT_NONE,
+
 	/// Spawn a program
 	CHAWM_EVENT_SPAWN,
 

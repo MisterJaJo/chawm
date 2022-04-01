@@ -4,4 +4,7 @@
 // Keybinds configuration
 #include "keybinds.h"
 
+// Mouse button actions configuration
+#include "button_actions.h"
+
 #endif /* CONFIG_H */

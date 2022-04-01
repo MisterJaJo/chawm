@@ -6,11 +6,6 @@
 #include "../instance_event.h"
 #include "../util.h"
 
-#define MOD       XCB_MOD_MASK_4
-#define MOD_ALT   XCB_MOD_MASK_1
-#define MOD_SHIFT XCB_MOD_MASK_SHIFT
-#define MOD_CTRL  XCB_MOD_MASK_CONTROL
-
 // Replace this with your preferred terminal emulator
 static const char *termcmd[]  = { "kitty", NULL };
 static const char *dmenucmd[] = { "dmenu_run", NULL };

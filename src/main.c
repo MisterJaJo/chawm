@@ -28,6 +28,12 @@ int main(void)
 
 	chawm_instance_grab_keys(inst);
 
+	// Register mouse button actions and grab buttons
+	inst->button_actions       = CHAWM_BUTTON_ACTIONS;
+	inst->button_actions_count = CHAWM_BUTTON_ACTIONS_COUNT;
+
+	chawm_instance_grab_buttons(inst);
+
 	// Add event handlers
 	inst->xcb_event_handlers = CHAWM_XCB_EVENT_HANDLERS;
 	inst->xcb_event_handlers_count = CHAWM_XCB_EVENT_HANDLERS_COUNT;

@@ -60,7 +60,9 @@ void chawm_instance_handle_instance_event(struct chawm_instance *inst, struct ch
 	{
 		struct chawm_instance_event_handler handler = inst->instance_event_handlers[i];
 
-		if (handler.code == event.code && handler.handler)
+		if (handler.code != CHAWM_EVENT_NONE && 
+		    handler.code == event.code && 
+		    handler.handler)
 		{
 			(*handler.handler)(inst, event);
 		}
@@ -89,6 +91,30 @@ void chawm_instance_grab_keys(struct chawm_instance *inst)
 		}
 		
 		free(keycode);
+	}
+
+	// Update connection
+	xcb_flush(inst->conn);
+}
+
+void chawm_instance_grab_buttons(struct chawm_instance *inst)
+{
+	xcb_ungrab_button(inst->conn, XCB_GRAB_ANY, inst->screen->root, XCB_MOD_MASK_ANY);
+
+	// Grab registered buttons
+	for (int i = 0; i < inst->button_actions_count; ++i)
+	{
+		struct chawm_button_action button_action = inst->button_actions[i];
+		xcb_grab_button(inst->conn, 
+				0,
+				inst->screen->root,
+				XCB_EVENT_MASK_BUTTON_PRESS | XCB_EVENT_MASK_BUTTON_RELEASE,
+				XCB_GRAB_MODE_ASYNC,
+				XCB_GRAB_MODE_ASYNC,
+				inst->screen->root,
+				XCB_NONE,
+				button_action.button,
+				button_action.modifier);
 	}
 
 	// Update connection

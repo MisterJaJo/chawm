@@ -8,6 +8,7 @@ struct chawm_instance;
 #include "xcb_event.h"
 
 #include "keybinds.h"
+#include "button_actions.h"
 
 struct chawm_instance
 {
@@ -17,6 +18,10 @@ struct chawm_instance
 	// Keybinds
 	struct chawm_keybind *keybinds;
 	unsigned int keybinds_count;
+
+	// (Mouse) button actions
+	struct chawm_button_action *button_actions;
+	unsigned int button_actions_count;
 
 	// XCB Event handlers
 	struct chawm_instance_xcb_event_handler *xcb_event_handlers;
@@ -34,6 +39,8 @@ void chawm_instance_handle_xcb_event(struct chawm_instance *inst, xcb_generic_ev
 void chawm_instance_handle_instance_event(struct chawm_instance *inst, struct chawm_instance_event event);
 
 void chawm_instance_grab_keys(struct chawm_instance *inst);
+void chawm_instance_grab_buttons(struct chawm_instance *inst);
+
 xcb_keycode_t *chawm_instance_get_keycodes(struct chawm_instance *inst, xcb_keysym_t keysym);
 xcb_keysym_t   chawm_instance_get_keysym(struct chawm_instance *inst, xcb_keycode_t keycode);
 

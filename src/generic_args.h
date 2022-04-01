@@ -10,6 +10,6 @@ struct chawm_generic_args
 };
 
 #define ARGS(definitions) { definitions }
-#define ARGS_NULL         { 0 }
+#define ARGS_NONE         { 0 }
 
 #endif /* GENERIC_ARGS_H */
