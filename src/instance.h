@@ -15,6 +15,12 @@ struct chawm_instance
 	xcb_connection_t *conn;
 	xcb_screen_t *screen;
 
+	// Default window configuration
+	// TODO: replace this with per-client configurations and layouts
+	int window_width, window_height;
+	int border_size;
+	int border_color_unfocused, border_color_focused;
+
 	// Keybinds
 	struct chawm_keybind *keybinds;
 	unsigned int keybinds_count;
