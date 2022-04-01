@@ -22,7 +22,7 @@ static struct chawm_keybind CHAWM_KEYBINDS[] =
 	{ MOD,             XK_d, { CHAWM_EVENT_SPAWN, ARGS(.v = dmenucmd) } },
 
 	// Quit the window manager
-	{ MOD | MOD_SHIFT, XK_e, { CHAWM_EVENT_QUIT,  ARGS_NULL } },
+	{ MOD | MOD_SHIFT, XK_e, { CHAWM_EVENT_QUIT,  ARGS(.i = 0) } },
 };
 static unsigned int CHAWM_KEYBINDS_COUNT = LENGTH(CHAWM_KEYBINDS);
 
