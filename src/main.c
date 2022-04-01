@@ -34,9 +34,6 @@ int main(void)
 	inst->instance_event_handlers = CHAWM_INSTANCE_EVENT_HANDLERS;
 	inst->instance_event_handlers_count = CHAWM_INSTANCE_EVENT_HANDLERS_COUNT;
 
-	printf("%d XCB event handlers were registered.\n", inst->xcb_event_handlers_count);
-	printf("%d event handlers were registered.\n", inst->xcb_event_handlers_count);
-
 	xcb_generic_event_t *event;
 	while((event = xcb_wait_for_event(inst->conn)))
 	{

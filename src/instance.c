@@ -45,7 +45,7 @@ void chawm_instance_handle_xcb_event(struct chawm_instance *inst, xcb_generic_ev
 	for (int i = 0; i < inst->xcb_event_handlers_count; ++i)
 	{
 		struct chawm_instance_xcb_event_handler handler = inst->xcb_event_handlers[i];
-		uint32_t handler_event_id = XCB_EVENT_SENT(event);
+		uint32_t handler_event_id = XCB_EVENT_RESPONSE_TYPE(event);
 
 		if (handler_event_id == handler.event_id && handler.handler)
 		{
