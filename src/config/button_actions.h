@@ -2,9 +2,9 @@
 #define CONFIG_BUTTON_ACTIONS_H
 
 #include "../generic_args.h"
-#include "../button_actions.h"
-#include "../instance_event.h"
 #include "../util.h"
+#include "../instance_event.h"
+#include "../button_actions.h"
 
 static struct chawm_button_action CHAWM_BUTTON_ACTIONS[] =
 {

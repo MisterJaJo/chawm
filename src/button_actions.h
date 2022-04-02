@@ -4,8 +4,8 @@
 #include <stdint.h>
 #include <X11/keysym.h>
 
-#include "instance_event.h"
 #include "xcb_definitions.h"
+#include "instance_event.h"
 
 struct chawm_button_action
 {

@@ -10,4 +10,7 @@
 // Window properties
 #include "window_properties.h"
 
+// Schemes
+#include "schemes.h"
+
 #endif /* CONFIG_H */

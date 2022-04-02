@@ -13,6 +13,7 @@ EV_HANDLER_DEF(motion_notify);
 EV_HANDLER_DEF(enter_notify);
 EV_HANDLER_DEF(destroy_notify);
 EV_HANDLER_DEF(map_request);
+EV_HANDLER_DEF(unmap_notify);
 EV_HANDLER_DEF(focus_in);
 EV_HANDLER_DEF(focus_out);
 EV_HANDLER_DEF(key_press);
@@ -26,6 +27,7 @@ static struct chawm_instance_xcb_event_handler CHAWM_XCB_EVENT_HANDLERS[] =
 	{ XCB_DESTROY_NOTIFY, EV_HANDLER(destroy_notify) },
 
 	{ XCB_MAP_REQUEST,    EV_HANDLER(map_request) },
+	{ XCB_UNMAP_NOTIFY,   EV_HANDLER(unmap_notify) },
 
 	{ XCB_FOCUS_IN,       EV_HANDLER(focus_in)  },
 	{ XCB_FOCUS_OUT,      EV_HANDLER(focus_out) },

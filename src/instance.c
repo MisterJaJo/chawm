@@ -151,6 +151,75 @@ xcb_keysym_t chawm_instance_get_keysym(struct chawm_instance *inst, xcb_keycode_
 	return keysym;
 }
 
+void chawm_instance_manage_client(struct chawm_instance *inst, struct chawm_client *client)
+{
+	if (inst && client)
+	{
+		// Configure client and update the connection
+		chawm_client_configure(inst, client);
+		xcb_flush(inst->conn);
+
+		uint32_t attrs[1] =
+		{
+			XCB_EVENT_MASK_ENTER_WINDOW | XCB_EVENT_MASK_FOCUS_CHANGE
+		};
+		xcb_change_window_attributes_checked(inst->conn, client->window, XCB_CW_EVENT_MASK, attrs);
+
+		chawm_client_focus(inst, client);
+
+		chawm_instance_enqueue_client(inst, client);
+	}
+}
+
+void chawm_instance_unmanage_client(struct chawm_instance *inst, struct chawm_client *client)
+{
+	if (inst && client)
+	{
+		// TODO
+		chawm_instance_remove_client(inst, client);
+	}
+}
+
+void chawm_instance_enqueue_client(struct chawm_instance *inst, struct chawm_client *client)
+{
+	if (inst->clients)
+	{
+		struct chawm_client *last;
+		for (last = inst->clients; last != NULL; last = last->next);
+		last->next = client;
+		client->prev = last;
+		client->next = NULL;
+	}
+	else
+	{
+		inst->clients = client;
+		client->prev = NULL;
+		client->next = NULL;
+	}
+}
+
+void chawm_instance_remove_client(struct chawm_instance *inst, struct chawm_client *client)
+{
+	if (client->prev)
+	{
+		client->prev->next = client->next;
+	}
+	else
+	{
+		inst->clients = client->next;
+	}
+
+	chawm_client_destroy(inst, client);
+}
+
+struct chawm_client *chawm_instance_win_to_client(struct chawm_instance *inst, xcb_window_t window)
+{
+	for (struct chawm_client *client = inst->clients; client != NULL; client = client->next)
+		if (client->window == window)
+			return client;
+	return NULL;
+}
+
 void chawm_instance_delete(struct chawm_instance *inst)
 {
 	xcb_disconnect(inst->conn);

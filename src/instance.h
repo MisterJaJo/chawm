@@ -9,17 +9,22 @@ struct chawm_instance;
 
 #include "keybinds.h"
 #include "button_actions.h"
+#include "client.h"
+#include "default_winprops.h"
+#include "scheme.h"
 
 struct chawm_instance
 {
 	xcb_connection_t *conn;
 	xcb_screen_t *screen;
 
-	// Default window configuration
-	// TODO: replace this with per-client configurations and layouts
-	int window_width, window_height;
-	int border_size;
-	int border_color_unfocused, border_color_focused;
+	// The linked list of managed client
+	struct chawm_client *clients;
+	struct chawm_default_winprops default_winprops;
+
+	// Schemes
+	struct chawm_scheme *schemes;
+	unsigned int schemes_count;
 
 	// Keybinds
 	struct chawm_keybind *keybinds;
@@ -49,6 +54,12 @@ void chawm_instance_grab_buttons(struct chawm_instance *inst);
 
 xcb_keycode_t *chawm_instance_get_keycodes(struct chawm_instance *inst, xcb_keysym_t keysym);
 xcb_keysym_t   chawm_instance_get_keysym(struct chawm_instance *inst, xcb_keycode_t keycode);
+
+void chawm_instance_manage_client(struct chawm_instance *inst, struct chawm_client *client);
+void chawm_instance_unmanage_client(struct chawm_instance *inst, struct chawm_client *client);
+void chawm_instance_enqueue_client(struct chawm_instance *inst, struct chawm_client *client);
+void chawm_instance_remove_client(struct chawm_instance *inst, struct chawm_client *client);
+struct chawm_client *chawm_instance_win_to_client(struct chawm_instance *inst, xcb_window_t window);
 
 void chawm_instance_delete(struct chawm_instance *inst);
 

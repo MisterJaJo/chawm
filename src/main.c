@@ -23,12 +23,16 @@ int main(void)
 	chawm_instance_check_err(inst);
 
 	// Set up default window configuration
-	// TODO: replace this with layouts and per-client configurations
-	inst->border_size            = BORDER_SIZE;
-	inst->window_width           = WINDOW_WIDTH;
-	inst->window_height          = WINDOW_HEIGHT;
-	inst->border_color_unfocused = BORDER_COLOR_UNFOCUSED;
-	inst->border_color_focused   = BORDER_COLOR_FOCUSED;
+	struct chawm_default_winprops props = 
+	{
+		WINDOW_WIDTH,
+		WINDOW_HEIGHT,
+		BORDER_SIZE,
+		CHAWM_SCHEME_DEFAULT
+	};
+	inst->default_winprops = props;
+	inst->schemes = CHAWM_SCHEMES;
+	inst->schemes_count = CHAWM_SCHEMES_COUNT;
 
 	// Register keybind configuration and grab keys
 	inst->keybinds       = CHAWM_KEYBINDS;
