@@ -57,8 +57,11 @@ EV_HANDLER_DEF(focus_in)
 	xcb_focus_in_event_t *in_event = (xcb_focus_in_event_t *) event;
 
 	struct chawm_client *client = chawm_instance_win_to_client(inst, in_event->event);
-	client->scheme = inst->schemes[CHAWM_SCHEME_FOCUSED];
-	chawm_client_apply_scheme(inst, client, XCB_CW_BORDER_PIXEL);
+	if (client)
+	{
+		client->scheme = inst->schemes[CHAWM_SCHEME_FOCUSED];
+		chawm_client_apply_scheme(inst, client, XCB_CW_BORDER_PIXEL);
+	}
 }
 
 EV_HANDLER_DEF(focus_out)
@@ -66,8 +69,11 @@ EV_HANDLER_DEF(focus_out)
 	xcb_focus_out_event_t *out_event = (xcb_focus_out_event_t *) event;
 
 	struct chawm_client *client = chawm_instance_win_to_client(inst, out_event->event);
-	client->scheme = inst->schemes[CHAWM_SCHEME_DEFAULT];
-	chawm_client_apply_scheme(inst, client, XCB_CW_BORDER_PIXEL);
+	if (client)
+	{
+		client->scheme = inst->schemes[CHAWM_SCHEME_DEFAULT];
+		chawm_client_apply_scheme(inst, client, XCB_CW_BORDER_PIXEL);
+	}
 }
 
 EV_HANDLER_DEF(key_press)

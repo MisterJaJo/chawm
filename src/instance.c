@@ -185,7 +185,7 @@ void chawm_instance_enqueue_client(struct chawm_instance *inst, struct chawm_cli
 	if (inst->clients)
 	{
 		struct chawm_client *last;
-		for (last = inst->clients; last != NULL; last = last->next);
+		for (last = inst->clients; last->next != NULL; last = last->next);
 		last->next = client;
 		client->prev = last;
 		client->next = NULL;

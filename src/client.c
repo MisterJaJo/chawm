@@ -13,7 +13,7 @@ void chawm_client_configure(struct chawm_instance *inst, struct chawm_client *cl
 
 void chawm_client_focus(struct chawm_instance *inst, struct chawm_client *client)
 {
-	if (client->window != NULL && client->window != inst->screen->root)
+	if (client->window != 0 && client->window != inst->screen->root)
 	{
 		xcb_set_input_focus(inst->conn, XCB_INPUT_FOCUS_POINTER_ROOT, client->window, XCB_CURRENT_TIME);
 	}
